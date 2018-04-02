@@ -5,6 +5,7 @@ import (
   "io/ioutil"
 	"strings"
   "container/list"
+  "os"
 )
 
 func Check(e error) {
@@ -13,8 +14,19 @@ func Check(e error) {
   }
 }
 
+func DetermineFilename()string {
+  args := os.Args[1:]
+
+  for _, arg := range args {
+    if strings.HasPrefix(arg, "--quizfile") {
+      return strings.Split(arg, "=")[1]
+    }
+  }
+  return "problems.csv"
+}
+
 func main() {
-  dat, err := ioutil.ReadFile("problems.csv")
+  dat, err := ioutil.ReadFile(DetermineFilename())
   Check(err)
   lines := strings.Split(string(dat), "\n")
 
